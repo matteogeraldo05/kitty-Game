@@ -74,16 +74,18 @@ def main():
         gameScreen.fill((135, 206, 235)) #& fill screen before kitty so gato show not screen :3p
     #! TABLE
         gameScreen.blit(table, (0, screenHeight-110))
-    
-    #? UNI the CAT
-        gameScreen.blit(uniImg, (0, 0))
 
     #$ BUG YUCK!
         if spawnBug == True:
-            pygame.draw.rect(gameScreen, (1, 1, 1), pygame.Rect(xPos, 315, 10, 10))
-            if hitRect is not None:
-                # Draw the filled red rect
-                pygame.draw.rect(gameScreen, (255, 0, 0), hitRect)
+            bugRect = pygame.Rect(xPos, 315, 10, 10)
+            pygame.draw.rect(gameScreen, (1, 1, 1), bugRect)
+
+            if hitRect is not None and hitRect.colliderect(bugRect):
+                bugKillCount += 1
+                spawnBug = False
+                print("KILLED BUG@!")
+    #? UNI the CAT
+        gameScreen.blit(uniImg, (0, 0))
         
     #& Debug Menu Text
         font = pygame.font.Font("freesansbold.ttf", 16)
