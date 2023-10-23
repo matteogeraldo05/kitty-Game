@@ -28,6 +28,7 @@ def main():
     lastTick = pygame.time.get_ticks()
     xPos = 360
     spawnBug = False
+    hitRect = None
 
     def randomBug(bugHeight):
         bugHeight = random.randint(100, 300)
@@ -56,10 +57,12 @@ def main():
                 uniImg = pawImg
             elif 100 < nowTick - lastTick <= 450:
                 uniImg = hitImg
+                hitRect = pygame.Rect(100, 250, 20, 110)
                 
             else:
                 hit = False
                 uniImg = restImg
+                hitRect = None
         else:
             uniImg = restImg
         
@@ -71,11 +74,16 @@ def main():
         gameScreen.fill((135, 206, 235)) #& fill screen before kitty so gato show not screen :3p
     #! TABLE
         gameScreen.blit(table, (0, screenHeight-110))
+    
+    #? UNI the CAT
+        gameScreen.blit(uniImg, (0, 0))
+
     #$ BUG YUCK!
         if spawnBug == True:
             pygame.draw.rect(gameScreen, (1, 1, 1), pygame.Rect(xPos, 315, 10, 10))
-    #? UNI the CAT
-        gameScreen.blit(uniImg, (0, 0))
+            if hitRect is not None:
+                # Draw the filled red rect
+                pygame.draw.rect(gameScreen, (255, 0, 0), hitRect)
         
     #& Debug Menu Text
         font = pygame.font.Font("freesansbold.ttf", 16)
