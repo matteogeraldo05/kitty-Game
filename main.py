@@ -3,6 +3,7 @@
 import pygame
 from pygame import mixer
 import random
+import sys
 
 pygame.init()
 mixer.init()
@@ -29,8 +30,8 @@ def titleScreen():
                     
         #& Quit 
             if event.type == pygame.QUIT: 
-                break
-    
+                sys.exit()
+                
 
 def endScreen():
     pygame.display.set_caption("The kitty Game Over :(") 
@@ -48,7 +49,7 @@ def endScreen():
                     
         #& Quit 
             if event.type == pygame.QUIT: 
-                break
+                sys.exit()
 
 def game():
     pygame.display.set_caption("The kitty Game") 
