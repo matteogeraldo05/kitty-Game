@@ -4,7 +4,7 @@ import pygame
 from pygame import mixer
 import random
 import sys
-import math
+import time
 
 pygame.init()
 mixer.init()
@@ -40,9 +40,7 @@ def titleScreen():
         gameScreen.blit(tileImg, (0, 0))
         titleText = font.render("Press SPACE/CLICK to play ", True, (255, 255, 255), (22, 32, 42))
         gameScreen.blit(titleText, (3, screenHeight/3.3))
-        pygame.display.update()
-
-                
+        pygame.display.update()                
 
 def endScreen():
     pygame.display.set_caption("The kitty Game Over :(") 
@@ -75,6 +73,7 @@ def game():
 #@ sound effects
     splat = mixer.Sound("audio/splat.wav")
     miss = mixer.Sound("audio/mwomp.wav")
+    yay = mixer.Sound("audio/yay.wav")
     
     clock = pygame.time.Clock()
 
@@ -82,6 +81,30 @@ def game():
     pawImg = pygame.image.load("sprites/pawUp.png")
     hitImg = pygame.image.load("sprites/pawHit.png")
     restImg = pygame.image.load("sprites/rest.png")
+    thumbsUpImg = pygame.image.load("sprites/thumbsUp.png")
+
+    def fadeInOut(thumbsUpImg):
+        for i in range(0, 256, 5):
+            thumbsUpImg.set_alpha(i)
+            gameScreen.blit(thumbsUpImg, (0, 0))
+            pygame.display.update()
+            pygame.time.delay(int(1.5 * 1000 / 51)) 
+        
+        for i in range(255, 0, -5):
+            gameScreen.fill((135, 206, 235))
+            gameScreen.blit(table, (0, screenHeight-110))
+            gameScreen.blit(restImg, (0, 0)) 
+            
+        #& Game Text
+            killCountText = font.render(f"bugs squashed: {bugKillCount}", True, (255, 255, 255))
+            gameScreen.blit(killCountText, (5, 5)) 
+            livesCountText = font.render(f"Lives:{catLives}", True, (255, 255, 255))
+            gameScreen.blit(livesCountText, (275, 5)) 
+            
+            thumbsUpImg.set_alpha(i)
+            gameScreen.blit(thumbsUpImg, (0, 0))
+            pygame.display.update()
+            pygame.time.delay(int(1.5 * 1000 / 51))
     
     bugImg = pygame.image.load("sprites/cock.png")
     table = pygame.image.load("sprites/table.png")
@@ -93,6 +116,7 @@ def game():
     spawnBug = False
     hitRect = None
     catLives = 9
+    scoreRewarded = False
 
     def randomBugSpeed():
         bugSpeed = random.randint(3, 9)
@@ -175,8 +199,7 @@ def game():
                 spawnBug = False
                 print("KILLED BUG@!")
     #? UNI the CAT
-        gameScreen.blit(uniImg, (0, 0))
-        
+        gameScreen.blit(uniImg, (0, 0)) 
         
     #& Game Text
         killCountText = font.render(f"bugs squashed: {bugKillCount}", True, (255, 255, 255))
@@ -184,6 +207,17 @@ def game():
 
         livesCountText = font.render(f"Lives:{catLives}", True, (255, 255, 255))
         gameScreen.blit(livesCountText, (275, 5)) 
+    
+    #$ Reward player with image and sound for meowing meow mao mew mew mrrp mamaamakspdjsohfhj
+        if (bugKillCount % 10) == 0 and bugKillCount > 0 and not scoreRewarded:
+            yay.play()
+            fadeInOut(thumbsUpImg) 
+            scoreRewarded = True
+            
+        elif (bugKillCount % 10) != 0:
+            scoreRewarded = False
+
+
 
     #@ Update screen
         clock.tick(60)
@@ -193,14 +227,16 @@ def reactionTime():
     pygame.display.set_caption("Reaction kitty (SECRET MODE!!)!") 
 
 #@ mew mew mewsi
-    #mixer.music.load("audio/Stronger.wav") #! STRONGER DOES NOT EXIST
-    mixer.music.play(loops=-1)
-    mixer.music.set_volume(0.7)
+    mixer.music.load("audio/yooo.wav") #! STRONGER DOES NOT EXIST
+    mixer.music.play()
+    mixer.music.set_volume(1)
 #@ sound effects
     huh = mixer.Sound("audio/huh.wav")
     aww = mixer.Sound("audio/aww.wav")
     scream = mixer.Sound("audio/scream.wav")
     boom = mixer.Sound("audio/vineBoom.wav")
+    pluh = mixer.Sound("audio/pluh.wav")
+    miau = mixer.Sound("audio/miau.wav")
     
     clock = pygame.time.Clock()
 
@@ -236,6 +272,11 @@ def reactionTime():
                     boom.play()
                 if event.key == pygame.K_4:
                     scream.play()
+                if event.key == pygame.K_5:
+                    pluh.play()
+                if event.key == pygame.K_6:
+                    miau.play()
+                    
                 
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 started = True
