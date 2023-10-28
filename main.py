@@ -63,6 +63,46 @@ def endScreen():
             if event.type == pygame.QUIT: 
                 sys.exit()
 
+def maxwellScreen():
+    pygame.display.set_caption("THE LEGENDARY MAXWELL") 
+    
+#@ THE PEN15 (EEK)! :O
+    mixer.music.load("audio/maxwell.wav")
+    mixer.music.play(loops=-1)
+    mixer.music.set_volume(0.9)
+
+    #& take all the maxwell frames to animate gif later
+    maxwell = []
+    for i in range(30):
+        filePath = f"sprites/maxwell/frame_{i}.png"
+        image = pygame.image.load(filePath)
+        maxwell.append(image)
+
+    while True:
+        for event in pygame.event.get():  
+        #& Quit 
+            if event.type == pygame.QUIT: 
+                sys.exit()    
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    game()
+                elif event.key == pygame.K_p:
+                    reactionTime()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                game()
+
+        currentFrame = pygame.time.get_ticks() // 100 % 30
+        gameScreen.fill((255, 255, 255))
+        gameScreen.blit(maxwell[currentFrame], (0, 50))
+    #& Game Text    
+        maxwellText = font.render("DO NOT THE CAT", True, (0, 0, 0), (255, 255, 255))
+        bottomText = font.render("BOTTOM TEXT", True, (0, 0, 0), (255, 255, 255))
+        gameScreen.blit(maxwellText, (100, 20))
+        gameScreen.blit(bottomText, (100, 300))
+        pygame.display.update()    
+
+#~ -------------------------------------------BUG-SQUISG-------------------------------------------------------------------
+
 def game():
     pygame.display.set_caption("The kitty Game") 
 
@@ -84,13 +124,13 @@ def game():
     thumbsUpImg = pygame.image.load("sprites/thumbsUp.png")
 
     def fadeInOut(thumbsUpImg):
-        for i in range(0, 256, 5):
+        for i in range(0, 256, 10):
             thumbsUpImg.set_alpha(i)
             gameScreen.blit(thumbsUpImg, (0, 0))
             pygame.display.update()
             pygame.time.delay(int(1.5 * 1000 / 51)) 
         
-        for i in range(255, 0, -5):
+        for i in range(255, 0, -10):
             gameScreen.fill((135, 206, 235))
             gameScreen.blit(table, (0, screenHeight-110))
             gameScreen.blit(restImg, (0, 0)) 
@@ -128,20 +168,19 @@ def game():
     while notRatiod:       
         pygame.display.flip() #update
         
-        for event in pygame.event.get():      
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    hit = True
-                    lastTick = pygame.time.get_ticks()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                hit = True
-                lastTick = pygame.time.get_ticks()
-                    
+        for event in pygame.event.get():   
         #& Quit 
             if event.type == pygame.QUIT: 
                 pass
             #^ HAHHHAH NO EXIT FROM GATO!!!
-                #sys.exit()
+                #sys.exit()   
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    hit = True
+                    lastTick = pygame.time.get_ticks()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                hit = True
+                lastTick = pygame.time.get_ticks()
         
     #? UNI ANIMATION - DONT TOUCH
         nowTick = pygame.time.get_ticks()
@@ -223,6 +262,8 @@ def game():
         clock.tick(60)
         pygame.display.update()
 
+#~ -------------------------------------------REACTION-TIME-------------------------------------------------------------------
+
 def reactionTime():
     pygame.display.set_caption("Reaction kitty (SECRET MODE!!)!") 
 
@@ -231,89 +272,74 @@ def reactionTime():
     mixer.music.play()
     mixer.music.set_volume(1)
 #@ sound effects
-    huh = mixer.Sound("audio/huh.wav")
-    aww = mixer.Sound("audio/aww.wav")
-    scream = mixer.Sound("audio/scream.wav")
     boom = mixer.Sound("audio/vineBoom.wav")
-    pluh = mixer.Sound("audio/pluh.wav")
     miau = mixer.Sound("audio/miau.wav")
     
     clock = pygame.time.Clock()
 
 #$ i am losing my grip on reality :333
-    theGato = pygame.image.load("sprites/goodJob.png")
+    doNot = pygame.image.load("sprites/doNot.png")
+    theCat = pygame.image.load("sprites/theCat.png")
+    thumbsUpImg = pygame.image.load("sprites/thumbsUp.png")
     
-    #squishHeight = 0 #todo animate cat
     score = 0
     catLives = 9
-    started = False
-    
-    threeSeconds = 0
-
-    
+    randomSeconds = random.randint(7000, 11000)
+    startTime = pygame.time.get_ticks()
+    reactionTimer = False
+    reactionWindow = 1000 
+    pressed = False  
 
 #& Game loop
     notRatiod = True  
     while notRatiod:       
         pygame.display.flip() #update
+        gameScreen.fill((150, 108, 230))
 
-        for event in pygame.event.get():      
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    started = True
-                    
-                    
-            #& sound effect test
-                if event.key == pygame.K_1:
-                    huh.play()
-                if event.key == pygame.K_2:
-                    aww.play()
-                if event.key == pygame.K_3:
-                    boom.play()
-                if event.key == pygame.K_4:
-                    scream.play()
-                if event.key == pygame.K_5:
-                    pluh.play()
-                if event.key == pygame.K_6:
-                    miau.play()
-                    
-                
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                started = True
-                    
-        #& Quit 
+        for event in pygame.event.get(): 
+            #& Quit 
             if event.type == pygame.QUIT: 
                 #pass
-                sys.exit()
-  
-    #@ WAIT 3 seconds
-        if started:
-            #todo Wait three seconds
-            pass
-            
-    #@ IF 3 SECONDS PASS  
-
-    #& Reaction time code
-        randomInt = random.randint(1, 300)
-        if randomInt == 1:
-            theGato = pygame.image.load("sprites/badJob.png")
-        else:
-            pass
-            #print(randomInt)
+                sys.exit()   
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pressed = True  
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    pressed = True  
         
-    #& GameOver Check
+        currentTime = pygame.time.get_ticks()
+        if currentTime - startTime >= randomSeconds and not reactionTimer:
+            doNot = theCat
+            miau = miau.play()
+            reactionTimer = True
+            reactionStartTime = pygame.time.get_ticks()   
+
+    #! penalty for early click
+        if pressed and (reactionTimer == False):
+            print("TO EARLY")
+            endScreen()
+
+    #& spacebar check within 1 second window
+        if reactionTimer:
+            reactionTime = pygame.time.get_ticks() - reactionStartTime
+            if pressed:
+                if reactionTime <= reactionWindow:
+                    miau.stop()
+                    boom.play()
+                    maxwellScreen()
+                else:
+                    endScreen()
+            
+            
+        pressed = False  
         if catLives <= 0:
             endScreen()
 
-        gameScreen.fill((150, 108, 230)) #& fill screen before kitty so gato show not screen :3p
-    
-    #? THE KANYE 
-        pygame.draw.rect(gameScreen, (92, 64, 51), pygame.Rect(220, 220, 10, 10))
-    #? the CAR
-        gameScreen.blit(theGato, ((screenWidth/2)-120, (screenHeight/2)-60))
+        
+        gameScreen.blit(doNot, (0, 0))
 
-    #@ Update screen
         clock.tick(60)
         pygame.display.update()
+
 
 titleScreen()
